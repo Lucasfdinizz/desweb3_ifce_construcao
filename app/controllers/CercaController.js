@@ -1,32 +1,26 @@
-const getCerca = require('../models/Cerca');
+const CercaModel = require('../models/Cerca');
 const Cerca = require('../lib/Cerca');
 
 class CercaController {
     constructor() {
-        this.Cerca = null;
-        getCerca().then((model) => {
-          this.Cerca = model;
-          console.log('Modelo Cerca carregado:', this.Cerca);
-        });
+        this.Cerca = CercaModel;
+        console.log('Modelo Cerca carregado:', this.Cerca);
     }
 
     async create(req, res) {
         const { nome, lado } = req.body;
         const cerca = await this.Cerca.create({ nome, lado });
 
-       
         const cercaObj = new Cerca(nome, lado);
         const area = cercaObj.area();
 
-       
         res.render('resposta', { area });
     }
 
     async list(req, res) {
         console.log('Rota /cercas chamada');
-        const cercas = await this.Cerca.findAll();
+        const cercas = await this.Cerca.find();
 
-        
         cercas.forEach(cerca => {
             const cercaObj = new Cerca(cerca.nome, cerca.lado);
             cerca.area = cercaObj.area();
@@ -38,7 +32,7 @@ class CercaController {
 
     async editar(req, res) {
         const { id } = req.params;
-        const cerca = await this.Cerca.findOne({ where: { id } });
+        const cerca = await this.Cerca.findOne({ _id: id }); 
         if (!cerca) {
             return res.redirect('/cercas');
         }
@@ -49,20 +43,20 @@ class CercaController {
         console.log('Update chamado o metódo update');
         const { id, nome, lado } = req.body;
         console.log('Parameters:', id, nome, lado);
-        await this.Cerca.update({ nome, lado }, { where: { id } });
+        await this.Cerca.updateOne({ _id: id }, { nome, lado }); 
         res.redirect('/cercas');
     }
 
     async delete(req, res) {
         const { id } = req.params;
-        await this.Cerca.destroy({ where: { id } });
+        await this.Cerca.deleteOne({ _id: id }); 
         req.session.messages = { success: 'Cerca excluída com sucesso.' };
         res.redirect('/cercas');
     }
 
     async getById(req, res) {
         const { id } = req.params;
-        const cerca = await this.Cerca.findOne({ where: { id } });
+        const cerca = await this.Cerca.findOne({ _id: id }); 
         res.render('cerca', { cerca });
     }
 }

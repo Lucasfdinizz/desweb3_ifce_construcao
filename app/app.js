@@ -5,8 +5,18 @@ const router = require('./routes/index');
 const session = require('express-session');
 const flash = require('connect-flash');
 const methodOverride = require('method-override');
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
 
-app.use(express.static(path.join(__dirname, 'public')));
+require('dotenv').config();
+
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => {
+        console.log('Conexão com o MongoDB estabelecida com sucesso');
+    })
+    .catch((error) => {
+        console.error('Erro ao estabelecer conexão com o MongoDB:', error);
+    });
 
 app.use(methodOverride('_method'));
 app.use(session({
@@ -30,15 +40,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cookieParser());
+
 app.use((req, res, next) => {
     console.log(`[${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}] ${req.method} to ${req.url}`);
     next();
 });
-
 app.use('/', router);
-
 app.use((req, res, next) => {
     res.status(404).send('Página não encontrada');
 });
 
-app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
+mongoose.connection.on('connected', () => {
+    app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
+});

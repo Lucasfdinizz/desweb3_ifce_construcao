@@ -1,10 +1,10 @@
-const { Sequelize } = require('sequelize');
+const mongoose = require('mongoose');
 const waitPort = require('wait-port');
 
 module.exports = async function() {
   let params = {
-    host: 'bd',
-    port: 3306,
+    host: 'mongo',
+    port: 27017, 
     output: 'silent',
     timeout: 30000
   };
@@ -12,18 +12,8 @@ module.exports = async function() {
   const open = await waitPort(params);
   if(open) {
     console.log('Banco de dados está pronto. Iniciando a aplicação...');
-    
-    const sequelize = new Sequelize(
-      process.env.MARIADB_DATABASE,
-      process.env.MARIADB_USER,
-      process.env.MARIADB_PASSWORD,
-      {
-          host: 'bd',
-          dialect: 'mariadb'
-      }
-    );
 
-    sequelize.authenticate()
+    mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
       .then(() => {
         console.log('Conexão com o banco de dados estabelecida com sucesso.');
       })
@@ -31,7 +21,7 @@ module.exports = async function() {
         console.error('Não foi possível conectar ao banco de dados:', err);
       });
 
-    return sequelize;
+    return mongoose;
 
   } else {
     console.log('Não foi possível conectar ao banco de dados. Encerrando...');
