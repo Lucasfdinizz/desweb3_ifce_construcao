@@ -1,0 +1,168 @@
+/* Reset de estilos */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+/* Estilo para o cabeçalho */
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Estilo para a barra de navegação */
+nav {
+    background-color: #444;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Estilo para o conteúdo principal */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px 0 40px;
+    padding-left: 40px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+h2, p {
+    padding-left: 50px;
+    color: #333;
+}
+
+/* Estilo para formulários */
+form {
+    display: flex;
+    align-items: center; /* Centraliza os elementos ao longo do eixo secundário */
+    flex-wrap: wrap; /* Permite que os elementos quebrem para a próxima linha se não houver espaço suficiente */
+}
+
+form label {
+    display: inline-block;
+    width: 100px; /* Largura fixa para os rótulos dos campos */
+    text-align: right;
+    margin-right: 10px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="submit"] {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    margin-right: 10px; /* Adiciona margem à direita para afastar os campos do botão */
+}
+
+/* Estilo para botões */
+button[type="submit"],
+button {
+    padding: 8px 15px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-block; /* Coloca os botões em linha */
+    margin-right: 10px; /* Cria um espaço entre os botões */
+}
+
+button:last-child {
+    margin-right: 0; /* Remove a margem direita do último botão */
+}
+
+/* Estilo para a mensagem de resultado */
+.result {
+    text-align: center;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para mensagens de erro */
+.error {
+    background-color: #ffcccc;
+    border: 1px solid #ff9999;
+}
+
+/* Estilo para mensagens de sucesso */
+.success {
+    background-color: #ccffcc;
+    border: 1px solid #99ff99;
+}
+
+/* Estilo para o conteúdo principal */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Estilo para a lista de cercas */
+.cercas-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.cerca-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.cerca-item h2 {
+    margin-top: 0;
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+.actions button {
+    padding: 7px 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 50px;
+}
+
+.actions form {
+    display: inline;
+    margin: 0;
+}

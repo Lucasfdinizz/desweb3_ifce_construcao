@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cercas</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <%- include('/home/node/app/views/cabecalho.ejs') %>
+    <div class="container">
+        <h1>Cercas</h1>
+        <% if (messages && messages.success) { %>
+            <div class="success">
+                <%= messages.success %>
+            </div>
+        <% } %>
+        <ul class="cercas-list">
+            <% cercas.forEach(function(cerca) { %>
+                <li class="cerca-item">
+                    <h2><%= cerca.nome %></h2>
+                    <p>Área: <%= cerca.area %> metros quadrados</p>
+                    <p><%= cerca.area >= 40 && cerca.area <= 60 ? 'É uma cerca média' : 'Não é uma cerca média' %></p>
+                    <div class="actions">
+                        <button class="edit" onclick="location.href='/cercas/editar/<%= cerca.id %>'">Editar</button>
+                        <form action="/cercas/<%= cerca.id %>?_method=DELETE" method="POST">
+                            <input type="submit" value="Excluir">
+                        </form>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+</body>
+</html>

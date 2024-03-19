@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resposta</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <%- include('/home/node/app/views/cabecalho.ejs') %>
+    <h1>Resultado</h1>
+    <p>A área da cerca é: <%= area %> metros quadrados.</p>
+    <% if (area >= 40 && area <= 60) { %>
+        <p>É uma cerca média.</p>
+    <% } else { %>
+        <p>Não é uma cerca média.</p>
+    <% } %>
+</body>
+</html>

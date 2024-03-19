@@ -1,0 +1,18 @@
+<html>
+<head>
+    <title>Editar Cerca</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <%- include('/home/node/app/views/cabecalho.ejs') %>
+    <h1>Editar Cerca</h1>
+    <form action="/cercas/<%= cerca.id %>?_method=PUT" method="POST">
+        <input type="hidden" name="id" value="<%= cerca.id %>">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" value="<%= cerca.nome %>">
+        <label for="lado">Lado:</label>
+        <input type="number" id="lado" name="lado" value="<%= cerca.lado %>">
+        <button class="btn-editar" type="submit">Salvar</button>
+    </form>
+</body>
+</html>
