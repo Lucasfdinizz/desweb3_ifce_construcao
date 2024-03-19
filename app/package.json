@@ -7,9 +7,9 @@
     "start": "nodemon app.js"
   },
   "keywords": [
-    "Triacontagono"
+    "Heptágono"
   ],
-  "author": "George Paulo",
+  "author": "Lucas de França Diniz",
   "license": "Apache-2.0",
   "dependencies": {
     "bcrypt": "^5.1.1",
