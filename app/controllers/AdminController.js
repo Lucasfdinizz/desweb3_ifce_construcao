@@ -35,7 +35,7 @@ class AdminController {
     }
   }
   showLoginForm(req, res) {
-    res.render('login', { messages: req.flash() });
+    res.render('admins', { messages: req.flash() });
   }
 
   async create(req, res) {

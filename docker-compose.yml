@@ -9,12 +9,12 @@ services:
     volumes:
       - ./app:/home/node/app
       - /home/node/app/node_modules
-  bd:
-    image: mariadb:latest
-    env_file: .env
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:latest
     volumes:
-      - ./mariadb/setup.sql:/docker-entrypoint-initdb.d/setup.sql
-      - dados_mariadb:/var/lib/mysql
+      - mongodb_data:/data/db
+
 volumes:
-  dados_mariadb:
-  node_modules:
+  mongodb_data:

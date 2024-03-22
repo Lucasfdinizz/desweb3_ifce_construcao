@@ -18,6 +18,8 @@ mongoose.connect(process.env.MONGODB_URI)
         console.error('Erro ao estabelecer conexão com o MongoDB:', error);
     });
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(methodOverride('_method'));
 app.use(session({
     secret: process.env.SEGREDO_JWT,
