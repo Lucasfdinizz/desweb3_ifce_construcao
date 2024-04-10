@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página Inicial</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <%- include('/home/node/app/views/cabecalho.ejs') %>
+    <div id="app">
+        <h1>Página Inicial</h1>
+        <p>Calcule a área de uma cerca em forma de heptágono. Se a área estiver dentro do intervalo de 40 a 60 metros quadrados, é uma cerca média. Caso contrário, é uma cerca que não se encaixa no padrão.</p>
+        <h2>Digite abaixo os dados:</h2>
+        <form action="/cercas" method="post">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome">
+            <label for="lado">Lado:</label>
+            <input type="number" id="lado" name="lado">
+            <input type="submit" value="Calcular">
+        </form>
+        <div v-for="resposta in respostas" :class="{ É uma cerca média: resposta.area >= 40 && area <= 60, Não é uma cerca média: resposta.area else { %> }">
+            {{ resposta.nome }}: {{ resposta.area }} metros quadrados
+        </div>
+        <div :class="{ É uma cerca média: resposta.area >= 40 && area <= 60, Não é uma cerca média: resposta.area else { %> }">
+            Última resposta: {{ ultimaResposta.nome }}: {{ ultimaResposta.area }} metros quadrados
+        </div>
+    </div>
+    <script>
+        const app = Vue.createApp({
+            setup() {
+                const form = Vue.ref({ nome: '', lado: 0 });
+                const respostas = Vue.ref([]);
+                const ultimaResposta = Vue.ref({});
+
+                const submitForm = () => {
+                    const pi = Math.PI;
+                    const area = (7/4) * Math.pow(this.lado, 2) * (1 / Math.tan(pi/7));
+                    const resposta = { nome: form.value.nome, area: area.toFixed(2) };
+                    respostas.value.push(resposta);
+                    ultimaResposta.value = resposta;
+                };
+    
+                return {
+                    form,
+                    respostas,
+                    ultimaResposta,
+                    submitForm
+                };
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+</html>
