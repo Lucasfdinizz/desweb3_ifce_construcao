@@ -18,12 +18,12 @@
             <input type="number" id="lado" name="lado">
             <input type="submit" value="Calcular">
         </form>
-        <div v-for="resposta in respostas" :class="{ É uma cerca média: resposta.area >= 40 && area <= 60, Não é uma cerca média: resposta.area else { %> }">
+        <div v-for="resposta in respostas" :key="resposta.id" :class="{ 'É uma cerca média': resposta.area >= 40 && resposta.area <= 60, 'Não é uma cerca média': resposta.area < 40 || resposta.area > 60 }">
             {{ resposta.nome }}: {{ resposta.area }} metros quadrados
         </div>
-        <div :class="{ É uma cerca média: resposta.area >= 40 && area <= 60, Não é uma cerca média: resposta.area else { %> }">
+        <div :class="{ 'É uma cerca média': ultimaResposta.area >= 40 && ultimaResposta.area <= 60, 'Não é uma cerca média': ultimaResposta.area < 40 || ultimaResposta.area > 60 }">
             Última resposta: {{ ultimaResposta.nome }}: {{ ultimaResposta.area }} metros quadrados
-        </div>
+        </div>        
     </div>
     <script>
         const app = Vue.createApp({
