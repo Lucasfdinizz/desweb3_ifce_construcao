@@ -3,7 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: #fff;
 }
 
 /* Estilo para o cabeçalho */
@@ -52,6 +52,11 @@ h1 {
 }
 
 h2, p {
+    padding-left: 50px;
+    color: #333;
+}
+
+.div-resposta {
     padding-left: 50px;
     color: #333;
 }
@@ -165,4 +170,9 @@ h1 {
 .actions form {
     display: inline;
     margin: 0;
+}
+
+.logo {
+    display: block;
+    margin: 20px auto; /* Centraliza horizontalmente */
 }

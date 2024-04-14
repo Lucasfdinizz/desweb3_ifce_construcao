@@ -6,6 +6,7 @@
 <body>
     <%- include('/home/node/app/views/cabecalho.ejs') %>
     <h1>Editar Cerca</h1>
+    <img class="logo" src="/_img/logo.png" alt="logo">
     <form action="/cercas/<%= cerca.id %>?_method=PUT" method="POST">
         <input type="hidden" name="id" value="<%= cerca.id %>">
         <label for="nome">Nome:</label>
