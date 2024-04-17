@@ -7,8 +7,9 @@ const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const webpush = require('web-push');
 
-require('dotenv').config();
+require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
 
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
@@ -39,6 +40,40 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.json());
+
+// Defina as chaves VAPID e a chave GCM
+webpush.setGCMAPIKey('AIzaSyCrIK0ypxsyGnY-17LbQ0dDFAxFEKZknJk');
+webpush.setVapidDetails(
+  'mailto:example@yourdomain.org',
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+);
+
+let subscriptions = [];
+// Rota para salvar as subscrições
+app.post('/subscribe', (req, res) => {
+    const subscription = req.body;
+    subscriptions.push(subscription);
+    console.log({ subscriptions });
+    res.status(201).json({});
+});
+
+app.get('/push', (req, res) => {
+    res.render('push');
+});
+
+// Rota para enviar notificações
+app.get('/notificar', (req, res) => {
+    const payload = JSON.stringify({ title: req.query.msg });
+    console.log('Notificando', subscriptions);
+    Promise.all(subscriptions.map(subscription => {
+        return webpush.sendNotification(subscription, payload)
+            .catch(error => console.error('Erro ao notificar:', error));
+    }))
+    .then(() => res.send('ok'))
+    .catch(() => res.status(500).send('Erro ao enviar notificações'));
+});
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
