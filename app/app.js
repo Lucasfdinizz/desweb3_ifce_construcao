@@ -8,7 +8,6 @@ const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const webpush = require('web-push');
-const vapidKeys = webpush.generateVAPIDKeys();
 
 require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
 
