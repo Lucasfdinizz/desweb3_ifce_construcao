@@ -8,6 +8,7 @@ const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const webpush = require('web-push');
+const vapidKeys = webpush.generateVAPIDKeys();
 
 require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
 
@@ -41,18 +42,17 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.json());
 
-// Defina as chaves VAPID e a chave GCM
-webpush.setGCMAPIKey('AIzaSyCrIK0ypxsyGnY-17LbQ0dDFAxFEKZknJk');
+// Defina as chaves VAPID - você pode gerar essas chaves usando o web-push
 webpush.setVapidDetails(
-  'mailto:example@yourdomain.org',
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
+    'mailto:seuemail@example.com',
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
 );
 
 let subscriptions = [];
 // Rota para salvar as subscrições
 app.post('/subscribe', (req, res) => {
-    const subscription = req.body;
+    subscription = req.body;
     subscriptions.push(subscription);
     console.log({ subscriptions });
     res.status(201).json({});
@@ -60,18 +60,18 @@ app.post('/subscribe', (req, res) => {
 
 app.get('/push', (req, res) => {
     res.render('push');
-});
+})
 
 // Rota para enviar notificações
 app.get('/notificar', (req, res) => {
     const payload = JSON.stringify({ title: req.query.msg });
-    console.log('Notificando', subscriptions);
-    Promise.all(subscriptions.map(subscription => {
-        return webpush.sendNotification(subscription, payload)
+    console.log('notificando', subscriptions);
+    for (let subscription of subscriptions) {
+        webpush.sendNotification(subscription, payload)
             .catch(error => console.error('Erro ao notificar:', error));
-    }))
-    .then(() => res.send('ok'))
-    .catch(() => res.status(500).send('Erro ao enviar notificações'));
+        console.log('notificando', subscription);
+    }
+    res.send('ok');
 });
 
 app.use(express.urlencoded({ extended: true }));

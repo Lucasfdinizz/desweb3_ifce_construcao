@@ -20,7 +20,7 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
-    "express": "^4.18.3",
+    "express": "^4.17.1",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
     "mariadb": "^3.2.3",
@@ -29,8 +29,8 @@
     "mongoose": "^8.2.1",
     "mysql2": "^3.9.2",
     "sequelize": "^6.37.1",
-    "web-push": "^3.6.7",
-    "wait-port": "^1.1.0"
+    "wait-port": "^1.1.0",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
