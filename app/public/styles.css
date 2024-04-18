@@ -176,3 +176,14 @@ h1 {
     display: block;
     margin: 20px auto; /* Centraliza horizontalmente */
 }
+
+.icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 0px; /* Adiciona um espaçamento entre a imagem e o texto */
+    vertical-align: middle; /* Alinha a imagem verticalmente com o texto */
+}
+
+.icon:hover {
+    opacity: 0.2; /* Reduz a opacidade da imagem quando o mouse passa por cima */
+}
