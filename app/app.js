@@ -11,6 +11,13 @@ const webpush = require('web-push');
 
 require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
 
+// Defina as chaves VAPID - você pode gerar essas chaves usando o web-push
+webpush.setVapidDetails(
+    'mailto:seuemail@example.com',
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+);
+
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
         console.log('Conexão com o MongoDB estabelecida com sucesso');
@@ -26,7 +33,6 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: 60000 }
 }));
-
 app.use(flash());
 
 app.use((req, res, next) => {
@@ -35,20 +41,18 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.static('public'))
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+app.use((req, res, next) => {
+    console.log(`[${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}] ${req.method} to ${req.url}`);
+    next();
+});
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.json());
-
-// Defina as chaves VAPID - você pode gerar essas chaves usando o web-push
-webpush.setVapidDetails(
-    'mailto:seuemail@example.com',
-    process.env.VAPID_PUBLIC_KEY,
-    process.env.VAPID_PRIVATE_KEY
-);
-
-let subscriptions = [];
 // Rota para salvar as subscrições
 app.post('/subscribe', (req, res) => {
     subscription = req.body;
@@ -59,7 +63,7 @@ app.post('/subscribe', (req, res) => {
 
 app.get('/push', (req, res) => {
     res.render('push');
-})
+});
 
 // Rota para enviar notificações
 app.get('/notificar', (req, res) => {
@@ -73,15 +77,8 @@ app.get('/notificar', (req, res) => {
     res.send('ok');
 });
 
-app.use(express.urlencoded({ extended: true }));
-
-app.use(cookieParser());
-
-app.use((req, res, next) => {
-    console.log(`[${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}] ${req.method} to ${req.url}`);
-    next();
-});
 app.use('/', router);
+
 app.use((req, res, next) => {
     res.status(404).send('Página não encontrada');
 });

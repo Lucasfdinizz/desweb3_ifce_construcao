@@ -26,48 +26,31 @@
     <div id="app">
         <h1>Página Inicial</h1>
         <img class="logo" src="/_img/logo.png" alt="logo">
-        <p>Calcule a área de uma cerca em forma de heptágono. Se a área estiver dentro do intervalo de 40 a 60 metros quadrados, é uma cerca média. Caso contrário, é uma cerca que não se encaixa no padrão.</p>
-        <h2>Digite abaixo os dados:</h2>
-        <form action="/cercas" method="post">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome">
-            <label for="lado">Lado:</label>
-            <input type="number" id="lado" name="lado">
-            <input type="submit" value="Calcular">
-        </form>
-        <div v-for="resposta in respostas" :key="resposta.id" class="div-resposta" :class="{ 'É uma cerca média': resposta.area >= 40 && resposta.area <= 60, 'Não é uma cerca média': resposta.area < 40 || resposta.area > 60 }">
-            {{ resposta.nome }}: {{ resposta.area }} metros quadrados
-        </div>
-        <div v-if="ultimaResposta" class="div-resposta" :class="{ 'É uma cerca média': ultimaResposta.area >= 40 && ultimaResposta.area <= 60, 'Não é uma cerca média': ultimaResposta.area < 40 || ultimaResposta.area > 60 }">
-            Última resposta: {{ ultimaResposta.nome }}: {{ ultimaResposta.area }} metros quadrados
-        </div>                
+        <p>Calcule a área de uma cerca em forma de heptágono. Se a área estiver dentro do intervalo de 40 a 60 metros quadrados, é uma cerca média. Caso contrário, é uma cerca que não se encaixa no padrão.</p>               
+        <crud-cercas :nomes="lista" @selecionado="seleciona"></crud-cercas>
+        <crud-cercas :nomes="lista" :nome2="nome"></crud-cercas>
     </div>
-    <script>
+    <script type="module">
+        import CrudCercas from './_js/CrudCercas.js'
         const app = Vue.createApp({
-            data() {
-                return {
-                    form: { nome: '', lado: 0 },
-                    respostas: JSON.parse(localStorage.getItem('respostas')) || [],
-                    ultimaResposta: JSON.parse(localStorage.getItem('ultimaResposta')) || {}
-                };
+            components: {
+                CrudCercas
             },
-            methods: {
-                submitForm() {
-                    const pi = Math.PI;
-                    const area = (7/4) * Math.pow(this.form.lado, 2) * (1 / Math.tan(pi/7));
-                    const resposta = { id: Date.now(), nome: this.form.nome, area: area.toFixed(2) };
-                    this.respostas.push(resposta);
-                    this.ultimaResposta = resposta;
-                    localStorage.setItem('respostas', JSON.stringify(this.respostas));
-                    localStorage.setItem('ultimaResposta', JSON.stringify(resposta));
-                    this.form.nome = '';
-                    this.form.lado = 0;
+            setup() {
+                const lista = Vue.ref([]);
+                const nome = Vue.ref(null);
+                function seleciona(evento) {
+                nome.value = evento;
                 }
-            },
-            created() {
-                this.ultimaResposta = JSON.parse(localStorage.getItem('ultimaResposta')) || {};
-            }
-        });
+                return {
+                    lista,
+                    nome,
+                    seleciona
+                }
+        },
+        data() {
+        },
+    });
 
     app.mount('#app');
     </script>

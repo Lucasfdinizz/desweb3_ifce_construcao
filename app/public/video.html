@@ -1,53 +1,82 @@
-<video id="videoElement" autoplay playsinline></video>
-<canvas id="canvas" style="display: none;"></canvas>
-<button id="captureButton">Capturar Foto</button>
-<button id="parar">parar</button>
-<button onclick="getCameraStream();">iniciar</button>
-<img id="capturedImage" src="" alt="Captured Image">
-<a id="downloadButton" download="captured_image.png">Download</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Localização</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/index_vue">Início</a></li>
+            <li><a href="/cercas">Cercas</a></li>
+            <li><a href="/admin/login">Logins</a></li>
+            <li><a href="/admin/create">Cadastra-se</a></li>
+            <li><a href="/sobre">Sobre</a></li>
+            <li><a href="/video.html"><img class="icon" src="/_img/camera.png" alt="Ícone de Câmera"></a></li>
+            <li><a href="/geo.html"><img class="icon" src="/_img/localizacao.png" alt="Ícone de Localização"></a></li>
+        </ul>
+    </nav>
 
-<script>
-    let stream;
-    const videoElement = document.getElementById('videoElement');
-    let canvas = document.querySelector('#canvas');
-    let ctx = canvas.getContext('2d');
-    let captureButton = document.querySelector('#captureButton');
-    let capturedImage = document.querySelector('#capturedImage');
-    let downloadButton = document.querySelector('#downloadButton');
-    let parar = document.querySelector('#parar');
+    <video id="videoElement" autoplay playsinline></video>
+    <canvas id="canvas" style="display: none;"></canvas>
 
-    parar.onclick = () => {
-        const tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
-    }
+    <div class="botoes-container">
+        <button class="botao" id="captureButton">Capturar Foto</button>
+        <button class="botao" id="parar">Parar</button>
+        <button class="botao" onclick="getCameraStream();">Iniciar</button>
+    </div>
 
-    videoElement.addEventListener('loadedmetadata', function () {
-        // Configurar as dimensões do canvas para corresponder às dimensões do vídeo
-        canvas.width = videoElement.videoWidth;
-        canvas.height = videoElement.videoHeight;
-        console.log('tamanho:', canvas.width, canvas.height);
-    });
+    <img id="capturedImage" src="" alt="Captured Image">
+    <a class="botao" id="downloadButton" download="captured_image.png">Download</a>
 
-    async function getCameraStream() {
-        try {
-            // Solicitar permissão para acessar a câmera
-            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    <script>
+        let stream;
+        const videoElement = document.getElementById('videoElement');
+        let canvas = document.querySelector('#canvas');
+        let ctx = canvas.getContext('2d');
+        let captureButton = document.querySelector('#captureButton');
+        let capturedImage = document.querySelector('#capturedImage');
+        let downloadButton = document.querySelector('#downloadButton');
+        let parar = document.querySelector('#parar');
 
-            // Exibir o vídeo da câmera no elemento de vídeo
-            videoElement.srcObject = stream;
-            return stream;
-        } catch (error) { console.error('Erro ao acessar a câmera:', error); }
-    }
-    getCameraStream();
-    captureButton.addEventListener('click', function () {
-        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob(function (blob) {
-            const imageUrl = URL.createObjectURL(blob);
-            capturedImage.src = imageUrl;
-            downloadButton.href = imageUrl;
+        parar.onclick = () => {
+            stopMediaStream(stream);
+        }
 
-            setTimeout(() => { URL.revokeObjectURL(imageUrl); }, 5000);
+        videoElement.addEventListener('loadedmetadata', function () {
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
         });
-    });
 
-</script>
+        async function getCameraStream() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+                return stream;
+            } catch (error) {
+                console.error('Erro ao acessar a câmera:', error);
+            }
+        }
+
+        function stopMediaStream(mediaStream) {
+            const tracks = mediaStream.getTracks();
+            tracks.forEach(track => track.stop());
+        }
+
+        getCameraStream();
+
+        captureButton.addEventListener('click', function () {
+            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(function (blob) {
+                const imageUrl = URL.createObjectURL(blob);
+                capturedImage.src = imageUrl;
+                downloadButton.href = imageUrl;
+
+                setTimeout(() => {
+                    URL.revokeObjectURL(imageUrl);
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>
