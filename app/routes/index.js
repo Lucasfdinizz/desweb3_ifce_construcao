@@ -28,6 +28,7 @@ router.delete('/cercas/:id', auth, (req, res) => cercaController.delete(req, res
 router.get('/cercas/:id', auth, (req, res) => cercaController.getById(req, res));
 router.get('/', (req, res) => res.render('index'));
 router.get('/index_vue', (req, res) => res.redirect('/'));
+router.get('/indexOriginal', (req, res) => {res.render('indexOriginal');});
 router.get('/sobre', (req, res) => sobreController.index(req, res));
 router.get('/resposta', (req, res) => {
     const { nome, lado, id } = req.query;

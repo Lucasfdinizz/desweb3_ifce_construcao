@@ -1,19 +1,18 @@
 export default {
     props: {
-        suportes: Array,
+        cercas: Array
     },
     setup(props, {emit}) {
         const route = VueRouter.useRoute();
         let id = route.params.id;
-        const suporte = props.suportes.value.filter(e => { return e.id == id; })[0];
+        const cerca = props.cercas.value.filter(e => { return e.id == id; })[0];
         return {
-            suporte
+            cerca
         }
     },
     template: `
     <h2>Detalhes</h2>
-    {{suporte.id}}
-    {{suporte.nome}}
-    {{suporte.lado}}
+    {{cerca.id}}
+    {{cerca.nome}}
     `
 }

@@ -3,7 +3,8 @@
 <head>
     <title>Página Inicial</title>
     <link rel="stylesheet" href="/styles.css">
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
     <link rel="manifest" href="/manifest.json">
     <script>
         if ('serviceWorker' in navigator) {
@@ -27,32 +28,55 @@
         <h1>Página Inicial</h1>
         <img class="logo" src="/_img/logo.png" alt="logo">
         <p>Calcule a área de uma cerca em forma de heptágono. Se a área estiver dentro do intervalo de 40 a 60 metros quadrados, é uma cerca média. Caso contrário, é uma cerca que não se encaixa no padrão.</p>               
-        <crud-cercas :nomes="lista" @selecionado="seleciona"></crud-cercas>
-        <crud-cercas :nomes="lista" :nome2="nome"></crud-cercas>
-    </div>
+        <nav>
+            <router-link to="/" class="nav-link">Início</router-link>
+            <router-link to="/admin/cercas" class="nav-link">Adicionar</router-link>
+            <router-link to="/autor" class="nav-link">Autor</router-link>
+        </nav>
+        <main>
+            <router-view />
+        </main>
+    </body>
+    </html>
     <script type="module">
         import CrudCercas from './_js/CrudCercas.js'
-        const app = Vue.createApp({
-            components: {
-                CrudCercas
-            },
+        import ListCercas from './_js/ListCercas.js'
+        import Autor from './_js/Autor.js'
+        import Detalhes from './_js/Detalhes.js'
+    
+        let cercas = Vue.ref([{ nome: 'Lucas', area: 4, id: 1 }]);
+        const routes = [
+            { path: '/', component: ListCercas, props: {
+                cercas
+            } },
+            { path: '/admin/cercas', component: CrudCercas, props: {
+                cercas
+            } },
+            { path: '/autor', component: Autor },
+            { path: '/detalhes/:id', component: Detalhes, props: {
+                cercas
+            } }
+        ]
+    
+        const router = VueRouter.createRouter({
+            history: VueRouter.createMemoryHistory(),
+            routes,
+        });
+    
+        Vue.createApp({
             setup() {
                 const lista = Vue.ref([]);
                 const nome = Vue.ref(null);
                 function seleciona(evento) {
-                nome.value = evento;
+                    nome.value = evento;
                 }
                 return {
                     lista,
                     nome,
                     seleciona
                 }
-        },
-        data() {
-        },
-    });
-
-    app.mount('#app');
+            }
+        }).use(router).mount('#app')
     </script>
     <script src="/_js/CercaStore.js"></script>
     <script>

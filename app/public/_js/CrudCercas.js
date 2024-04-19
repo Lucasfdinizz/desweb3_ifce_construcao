@@ -1,65 +1,41 @@
 export default {
     props: {
-        nomes: Array,
+        cercas: Array,
         nome2: String
     },
-    setup(props, {emit}) {
-        const nome = Vue.ref(props.nome2)
-        const nomes = Vue.ref(props.nomes)
+    setup(props, { emit }) {
+        const nome = Vue.ref('');
+        const cercas = Vue.ref(props.cercas);
+
         function inserir() {
-            nomes.value.push(nome.value);
+            const pi = Math.PI;
+            const area = (7 / 4) * Math.pow(Number(document.getElementById('lado').value), 2) * (1 / Math.tan(pi / 7));
+            cercas.value.push({ id: cercas.value.length + 1, nome: nome.value, area: area.toFixed(2) });
+            nome.value = ''; // Limpa o campo de nome após a inserção
+            document.getElementById('lado').value = ''; // Limpa o campo de lado após a inserção
         }
+
         function selecionar(nome) {
             emit('selecionado', nome);
         }
-        /*Vue.watch(props.nome, function (novo) {
-            nome.value = novo;
-        });*/
+
         return {
             nome,
-            nomes,
+            cercas,
             inserir,
             selecionar
-        }
-    },
-    data() {
-        return {
-            form: { nome: '', lado: 0 },
-            respostas: JSON.parse(localStorage.getItem('respostas')) || [],
-            ultimaResposta: JSON.parse(localStorage.getItem('ultimaResposta')) || {}
         };
     },
-    methods: {
-        submitForm() {
-            const pi = Math.PI;
-            const area = (7/4) * Math.pow(this.form.lado, 2) * (1 / Math.tan(pi/7));
-            const resposta = { id: Date.now(), nome: this.form.nome, area: area.toFixed(2) };
-            this.respostas.push(resposta);
-            this.ultimaResposta = resposta;
-            localStorage.setItem('respostas', JSON.stringify(this.respostas));
-            localStorage.setItem('ultimaResposta', JSON.stringify(resposta));
-            this.form.nome = '';
-            this.form.lado = 0;
-        }
-    },
-    created() {
-        this.ultimaResposta = JSON.parse(localStorage.getItem('ultimaResposta')) || {};
-    },
     template: `
-    <h2>Digite abaixo os dados:</h2>
-    <form action="/cercas" method="post">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome">
-        <label for="lado">Lado:</label>
-        <input type="number" id="lado" name="lado">
-        <input type="submit" value="Calcular">
-    </form>       
-    <h2>Última resposta:</h2>
-    <div v-for="resposta in respostas" :key="resposta.id" class="div-resposta" :class="{ 'É uma cerca média': resposta.area >= 40 && resposta.area <= 60, 'Não é uma cerca média': resposta.area < 40 || resposta.area > 60 }">
-        {{ resposta.nome }}: {{ resposta.area }} metros quadrados
-    </div>
-    <div v-if="ultimaResposta" class="div-resposta" :class="{ 'É uma cerca média': ultimaResposta.area >= 40 && ultimaResposta.area <= 60, 'Não é uma cerca média': ultimaResposta.area < 40 || ultimaResposta.area > 60 }">
-        Última resposta: {{ ultimaResposta.nome }}: {{ ultimaResposta.area }} metros quadrados
+    <div>
+        <h2>Digite abaixo os dados:</h2>
+        <form @submit.prevent="inserir">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" v-model="nome">
+            <label for="lado">Lado:</label>
+            <input type="number" id="lado">
+            <button type="submit">Adicionar Cerca</button>
+        </form>
     </div>
     `
-}
+};
