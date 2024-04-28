@@ -1,8 +1,8 @@
-const Admin = require('../models/Admin');
+const Usuario = require('../models/Usuario');
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../utils/jwt');
 
-class AdminController {
+class UsuarioController {
   async login(req, res) {
     const { nome, senha } = req.body;
 
@@ -12,23 +12,23 @@ class AdminController {
 
     try {
       console.log(`Tentando fazer login com nome: ${nome}`);
-      const admin = await Admin.findOne({ nome });
-      console.log(`Administrador encontrado: ${admin}`);
+      const usuario = await Usuario.findOne({ nome });
+      console.log(`Usuário encontrado: ${usuario}`);
       
-      if (!admin) {
+      if (!usuario) {
         return res.status(401).json({ error: 'Usuário ou senha inválidos' });
       }
 
-      const isPasswordMatch = await bcrypt.compare(senha, admin.senha);
+      const isPasswordMatch = await bcrypt.compare(senha, usuario.senha);
       console.log(`A senha corresponde: ${isPasswordMatch}`);
       
       if (!isPasswordMatch) {
         return res.status(401).json({ error: 'Usuário ou senha inválidos' });
       }
 
-      const token = generateToken({ id: admin.id, nome: admin.nome });
+      const token = generateToken({ id: usuario.id, nome: usuario.nome });
       res.cookie('token', token, { httpOnly: true });
-      res.redirect('/admin');
+      res.redirect('/usuario');
     } catch (error) {
       console.error('Erro durante o login:', error);
       return res.status(500).json({ error: 'Erro interno do servidor' });
@@ -40,34 +40,34 @@ class AdminController {
 
   async create(req, res) {
     const { nome, senha } = req.body;
-    const admin = new Admin({ nome, senha });
-    await admin.save();
-    res.redirect('/admins');
+    const usuario = new Usuario({ nome, senha });
+    await usuario.save();
+    res.redirect('/usuarios');
   }
 
   async list(req, res) {
-    const admins = await Admin.find();
-    res.render('admins', { admins, messages: req.flash() });
+    const usuarios = await Usuario.find();
+    res.render('usuarios', { usuarios, messages: req.flash() });
   }
 
   async update(req, res) {
     const { id, nome, senha } = req.body;
     const hashedPassword = bcrypt.hashSync(senha, 10);
-    await Admin.findByIdAndUpdate(id, { nome, senha: hashedPassword });
-    res.redirect('/admin');
+    await Usuario.findByIdAndUpdate(id, { nome, senha: hashedPassword });
+    res.redirect('/usuario');
   }
 
   async delete(req, res) {
     const { id } = req.params;
-    await Admin.findByIdAndRemove(id);
-    res.redirect('/admin');
+    await Usuario.findByIdAndRemove(id);
+    res.redirect('/usuario');
   }
 
   async getById(req, res) {
     const { id } = req.params;
-    const admin = await Admin.findById(id);
-    res.render('admin', { admin });
+    const usuario = await Usuario.findById(id);
+    res.render('usuario', { usuario });
   }
 }
 
-module.exports = AdminController;
+module.exports = UsuarioController;

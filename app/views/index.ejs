@@ -28,6 +28,19 @@
         <h1>Página Inicial</h1>
         <img class="logo" src="/_img/logo.png" alt="logo">
         <p>Calcule a área de uma cerca em forma de heptágono. Se a área estiver dentro do intervalo de 40 a 60 metros quadrados, é uma cerca média. Caso contrário, é uma cerca que não se encaixa no padrão.</p>               
+        <form action="/cercas" method="post">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome">
+            <label for="lado">Lado:</label>
+            <input type="number" id="lado" name="lado">
+            <input type="submit" value="Calcular">
+        </form>
+        <div v-for="resposta in respostas" :key="resposta.id" class="div-resposta" :class="{ 'É uma cerca média': resposta.area >= 40 && resposta.area <= 60, 'Não é uma cerca média': resposta.area < 40 || resposta.area > 60 }">
+            {{ resposta.nome }}: {{ resposta.area }} metros quadrados
+        </div>
+        <div v-if="ultimaResposta" class="div-resposta" :class="{ 'É uma cerca média': ultimaResposta.area >= 40 && ultimaResposta.area <= 60, 'Não é uma cerca média': ultimaResposta.area < 40 || ultimaResposta.area > 60 }">
+            Última resposta: {{ ultimaResposta.nome }}: {{ ultimaResposta.area }} metros quadrados
+        </div>
         <nav>
             <router-link to="/" class="nav-link">Início</router-link>
             <router-link to="/admin/cercas" class="nav-link">Adicionar</router-link>

@@ -1,18 +1,27 @@
-<% if (messages.success) { %>
-    <div class="alert alert-success">
-        <%= messages.success %>
-    </div>
-<% } %>
-
-<%- include('/home/node/app/views/cabecalho.ejs') %>
-<form action="/admin/login" method="post">
-    <div class="form-group">
-        <label for="nome">Nome de usuário</label>
-        <input type="text" class="form-control" id="nome" name="nome" required>
-    </div>
-    <div class="form-group">
-        <label for="senha">Senha</label>
-        <input type="password" class="form-control" id="senha" name="senha" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Entrar</button>
-</form>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Criar Admin</title>
+        <link rel="stylesheet" href="/styles.css">
+    </head>
+    <body>
+        <%- include('/home/node/app/views/cabecalho.ejs') %>
+        <% if (messages.success) { %>
+        <div class="alert alert-success">
+            <%= messages.success %>
+        </div>
+        <% } %>
+        <h1>Logins</h1>
+        <form action="/admin/login" method="post">
+            <div class="form-group">
+                <label for="nome">Nome de usuário</label>
+                <input type="text" class="form-control" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" class="form-control" id="senha" name="senha" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+    </body>
+</html>

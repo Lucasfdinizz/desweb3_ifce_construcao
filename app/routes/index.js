@@ -3,10 +3,12 @@ const router = express.Router();
 const Cerca = require('../lib/Cerca');
 const CercaController = require('../controllers/CercaController');
 const AdminController = require('../controllers/AdminController');
+const UsuarioController = require('../controllers/UsuarioController');
 const SobreController = require('../controllers/SobreController'); 
 const auth = require('../controllers/auth');
 
 const adminController = new AdminController();
+const usuarioController = new UsuarioController();
 const sobreController = new SobreController(); 
 const cercaController = new CercaController();
 
@@ -16,6 +18,7 @@ router.get('/cercas/editar/:id', auth, (req, res) => {
 });
 
 router.get('/admin', (req, res) => adminController.list(req, res));
+router.get('/usuario', auth, (req, res) => usuarioController.list(req, res));
 router.post('/cercas', auth, (req, res) => cercaController.create(req, res));
 router.get('/cercas', auth, (req, res) => cercaController.list(req, res));
 router.get('/admin/create', (req, res) => res.render('criar_admin'));
@@ -28,7 +31,6 @@ router.delete('/cercas/:id', auth, (req, res) => cercaController.delete(req, res
 router.get('/cercas/:id', auth, (req, res) => cercaController.getById(req, res));
 router.get('/', (req, res) => res.render('index'));
 router.get('/index_vue', (req, res) => res.redirect('/'));
-router.get('/indexOriginal', (req, res) => {res.render('indexOriginal');});
 router.get('/sobre', (req, res) => sobreController.index(req, res));
 router.get('/resposta', (req, res) => {
     const { nome, lado, id } = req.query;
